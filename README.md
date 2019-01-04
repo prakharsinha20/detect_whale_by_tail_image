@@ -1,0 +1,1 @@
+# detect_whale_by_tail_image
