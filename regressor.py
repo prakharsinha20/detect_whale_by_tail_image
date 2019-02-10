@@ -20,7 +20,7 @@ for f in train_images:
     img = io.imread(f)
     if len(img.shape) == 2:
         img = grayscale_image_to_color(img)
-    img = transform.resize(img, (28, 28))
+    img = transform.resize(img, (56, 56))
     images.append(img)
     img_name = f.split('/')[-1]
     labels.append(class_names.index(df_train.loc[df_train['Image'] == img_name, 'Id'].iloc[0]))
@@ -34,18 +34,12 @@ model.compile(optimizer=tf.train.AdamOptimizer(),
                 metrics=['accuracy'])
 model.fit(images, labels, epochs=5)
 test_images = fetch_images('test')
-#test_images = transform_images_test(test_images)
-#images_predict= []
 for f in test_images:
         img = io.imread(f)
         if len(img.shape) == 2:
             img = grayscale_image_to_color(img)
-        img = transform.resize(img, (28, 28))
+        img = transform.resize(img, (56, 56))
         images_predict.append(img)
 images_predict = array(images_predict)
 predictions = model.predict(images_predict)
-print(len(predictions))
-for prediction in predictions:
-    submission.append(predictions[np.argsort(predictions)[-5:]])
-#print(submission[3])
-
+np.savetxt("predictions.csv", predictions, delimiter=",")
